@@ -8,7 +8,7 @@ An Android application built with Jetpack Compose for tracking location-based pu
 
 **Author:** Ravish Mishra  
 **GitHub:** [@ravishmishralko](https://github.com/ravishmishralko)  
-**Date:** November 2024
+**Date:** 30 November 2025
 
 ---
 
@@ -30,12 +30,6 @@ An Android application built with Jetpack Compose for tracking location-based pu
 - 🔄 Kotlin Coroutines & Flow
 - 📊 MVVM architecture pattern
 - 🔐 DataStore for preferences
-
----
-
-## 📸 Screenshots
-
-*[Add screenshots here if available]*
 
 ---
 
@@ -294,7 +288,7 @@ Output: `app/build/outputs/apk/release/app-release.apk`
 ```
 MIT License
 
-Copyright (c) 2024 Ravish Mishra
+Copyright (c) 2025 Ravish Mishra
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -322,7 +316,7 @@ SOFTWARE.
 **Ravish Mishra**
 
 - GitHub: [@ravishmishralko](https://github.com/ravishmishralko)
-- Email: [your.email@example.com]
+- Email: ravishmishralko@gmail.com
 
 ---
 
@@ -368,7 +362,7 @@ The APK file is likely too large for email. Here are solutions:
 ```
 **APK File:**  
 The debug APK is available for download here:  
-https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=sharing
+https://drive.google.com/file/d/1StnXmSYZLJxOiaTKUiYl8sTSYe2wA2xG/view?usp=drive_link
 
 File Name: PunchInTracker-debug.apk  
 File Size: [XX MB]  
