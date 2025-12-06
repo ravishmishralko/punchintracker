@@ -21,19 +21,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.LocationServices
+import com.office.punchintracker.data.DataStoreManager
 import com.office.punchintracker.data.local.PunchInDatabase
 import com.office.punchintracker.data.local.PunchInEntity
 import com.office.punchintracker.data.repository.PunchInRepository
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-
-private val Context.dataStore by preferencesDataStore(name = "user_prefs")
 
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -57,8 +53,7 @@ fun PunchInScreen(
     var longitude by remember { mutableStateOf(0.0) }
     var punchInCount by remember { mutableStateOf(0) }
 
-    val userId by context.dataStore.data
-        .map { prefs -> prefs[stringPreferencesKey("user_id")] ?: "User" }
+    val userId by DataStoreManager.getUserId(context)
         .collectAsState(initial = "User")
 
     val database = remember { PunchInDatabase.getDatabase(context) }

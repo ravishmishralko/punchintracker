@@ -19,15 +19,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.compose.rememberNavController
+import com.office.punchintracker.data.DataStoreManager
 import com.office.punchintracker.ui.navigation.NavGraph
 import com.office.punchintracker.ui.navigation.Screen
 import com.office.punchintracker.ui.theme.PunchInTrackerTheme
-import kotlinx.coroutines.flow.map
-
-private val android.content.Context.dataStore by preferencesDataStore(name = "user_prefs")
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,10 +38,7 @@ class MainActivity : ComponentActivity() {
                     val context = LocalContext.current
                     val navController = rememberNavController()
 
-                    val isLoggedIn by context.dataStore.data
-                        .map { prefs ->
-                            prefs[stringPreferencesKey("is_logged_in")] == "true"
-                        }
+                    val isLoggedIn by DataStoreManager.isLoggedIn(context)
                         .collectAsState(initial = false)
 
                     val startDestination = if (isLoggedIn) {

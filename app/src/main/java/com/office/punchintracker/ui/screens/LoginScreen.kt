@@ -4,7 +4,6 @@
  */
 package com.office.punchintracker.ui.screens
 
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
@@ -15,12 +14,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
+import com.office.punchintracker.data.DataStoreManager
 import kotlinx.coroutines.launch
-
-private val Context.dataStore by preferencesDataStore(name = "user_prefs")
 
 @Composable
 fun LoginScreen(
@@ -93,10 +88,7 @@ fun LoginScreen(
                     password.length < 4 -> errorMessage = "Password must be at least 4 characters"
                     else -> {
                         scope.launch {
-                            context.dataStore.edit { prefs ->
-                                prefs[stringPreferencesKey("user_id")] = username
-                                prefs[stringPreferencesKey("is_logged_in")] = "true"
-                            }
+                            DataStoreManager.saveUser(context, username)
                             onLoginSuccess()
                         }
                     }
@@ -121,10 +113,7 @@ fun LoginScreen(
                     errorMessage = "Password must be at least 4 characters"
                 } else {
                     scope.launch {
-                        context.dataStore.edit { prefs ->
-                            prefs[stringPreferencesKey("user_id")] = username
-                            prefs[stringPreferencesKey("is_logged_in")] = "true"
-                        }
+                        DataStoreManager.saveUser(context, username)
                         onLoginSuccess()
                     }
                 }

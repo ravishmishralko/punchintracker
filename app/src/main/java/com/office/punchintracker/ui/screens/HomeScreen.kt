@@ -4,7 +4,6 @@
  */
 package com.office.punchintracker.ui.screens
 
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
@@ -16,13 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
-import kotlinx.coroutines.flow.map
+import com.office.punchintracker.data.DataStoreManager
 import kotlinx.coroutines.launch
-
-private val Context.dataStore by preferencesDataStore(name = "user_prefs")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,53 +28,48 @@ fun HomeScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    val userId by context.dataStore.data
-        .map { prefs -> prefs[stringPreferencesKey("user_id")] ?: "User" }
+    val userId by DataStoreManager.getUserId(context)
         .collectAsState(initial = "User")
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        // Background
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "Welcome, $userId!",
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onBackground
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Column {
+                        Text("Punch-In Tracker")
+                        Text(
+                            text = "Track your location every 10 minutes",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                }
             )
         }
-
-        // Overlay layout with cards
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(padding)
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Top section
-            Column {
+            // Top welcome section
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(
-                    text = "Punch-In Tracker",
-                    style = MaterialTheme.typography.headlineSmall,
+                    text = "Welcome, $userId!",
+                    style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.primary
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = "Track your location every 10 minutes",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             // Middle section with action cards
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 // Punch-In Card
                 Card(
@@ -119,8 +108,6 @@ fun HomeScreen(
                         }
                     }
                 }
-
-                Spacer(modifier = Modifier.height(16.dp))
 
                 // View Route Card
                 Card(
@@ -165,9 +152,7 @@ fun HomeScreen(
             OutlinedButton(
                 onClick = {
                     scope.launch {
-                        context.dataStore.edit { prefs ->
-                            prefs[stringPreferencesKey("is_logged_in")] = "false"
-                        }
+                        DataStoreManager.logout(context)
                         onLogout()
                     }
                 },
